@@ -40,6 +40,7 @@ project/plugins/project/
 
 # BSP & Metals
 .bloop/
+.bsp/
 .metals/
 **/metals.sbt
 
