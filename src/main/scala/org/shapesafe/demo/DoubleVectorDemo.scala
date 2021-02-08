@@ -2,7 +2,7 @@ package org.shapesafe.demo
 
 import com.tribbloids.graph.commons.util.debug.print_@
 import org.shapesafe.breeze.tensor.DoubleVector
-import org.shapesafe.m.arity.Arity
+import org.shapesafe.core.arity.Arity
 
 object DoubleVectorDemo {
 
