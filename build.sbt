@@ -64,7 +64,8 @@ lazy val compileSettings = Def.settings(
   scalacOptions in (Test, console) -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
-    "com.tribbloids.shapesafe" % "shapesafe-core-breeze" % projectVersion,
+    "com.tribbloids.shapesafe" % "shapesafe-djl" % projectVersion,
+    "com.tribbloids.shapesafe" % "shapesafe-breeze" % projectVersion,
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
   ),
   libraryDependencies ++= {
