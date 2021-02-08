@@ -4,7 +4,7 @@ import scala.sys.process._
 
 scalaVersion := "2.13.4"
 
-val groupId = "com.tribbloids.shapesafe"
+val groupId = "org.shapesafe"
 val projectName = "shapesafe-demo"
 val projectVersion = "0.1.0-SNAPSHOT"
 
@@ -64,8 +64,8 @@ lazy val compileSettings = Def.settings(
   scalacOptions in (Test, console) -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
-    "com.tribbloids.shapesafe" % "shapesafe-djl" % projectVersion,
-    "com.tribbloids.shapesafe" % "shapesafe-breeze" % projectVersion,
+    "org.shapesafe" % "shapesafe-djl" % projectVersion,
+    "org.shapesafe" % "shapesafe-breeze" % projectVersion,
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
   ),
   libraryDependencies ++= {
