@@ -2,7 +2,7 @@ package org.shapesafe.demo
 
 import com.tribbloids.graph.commons.util.debug.print_@
 import org.shapesafe.breeze.tensor.DoubleVector
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.Leaf
 
 object DoubleVectorDemo {
 
@@ -48,7 +48,7 @@ object DoubleVectorDemo {
       //    conved.arity.internal.requireEqual(28) // doesn't compile
     }
 
-    val _3 = Arity(3)
+    val _3 = Leaf(3)
 
 //    def printD3[A <: Shape](v: DoubleVector[A])(
 //      implicit
