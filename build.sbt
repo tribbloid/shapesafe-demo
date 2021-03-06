@@ -2,15 +2,15 @@ import scala.sys.process._
 
 /// variables
 
-scalaVersion := "2.13.4"
+scalaVersion := "2.13.5"
 
 val groupId = "org.shapesafe"
 val projectName = "shapesafe-demo"
 val projectVersion = "0.1.0-SNAPSHOT"
 
 val macroParadiseVersion = "2.1.1"
-val shapelessVersion = "2.3.3"
-val scalaCheckVersion = "1.15.2"
+//val shapelessVersion = "2.3.3"
+//val scalaCheckVersion = "1.15.2"
 
 /// projects
 lazy val root = project
@@ -75,13 +75,6 @@ lazy val compileSettings = Def.settings(
       case Some((2, v)) if v >= 13 =>
         Seq()
       case v @ _ =>
-        println("Hello, world")
-        println("Hello, world")
-        println("Hello, world")
-        println("Hello, world")
-        println("Hello, world")
-        println("Hello, world")
-
         println(v)
         Seq(
           compilerPlugin(
