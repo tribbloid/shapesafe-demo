@@ -1,9 +1,9 @@
-package org.shapesafe.demo.breeze
+package org.shapesafe.demo.core
 
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
 
-object A extends App {
+object Showcase1 extends App {
 
   val s1 = Shape(3).named("i")
   val s2 = s1 >< s1
@@ -11,10 +11,13 @@ object A extends App {
   val s4 = s3 >< s3
 
   print(s4)
-  print(s4.eval)
+
+  val e4 = s4.eval
+  print(e4)
 
   val flat = s4.flatten(ArityOps.:*)
-  print(flat.eval)
+  val eFlat = flat.eval
+  print(eFlat)
 
   flat
     .dot(

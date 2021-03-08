@@ -65,8 +65,8 @@ lazy val compileSettings = Def.settings(
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
     "org.shapesafe" % "shapesafe-djl" % projectVersion,
-    "org.shapesafe" % "shapesafe-breeze" % projectVersion,
-    "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
+    "org.shapesafe" % "shapesafe-breeze" % projectVersion
+    // "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
   ),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
