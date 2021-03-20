@@ -1,6 +1,6 @@
 package org.shapesafe.demo.core
 
-import org.shapesafe.core.arity.ops.ArityOps
+import org.shapesafe.core.arity.ArityAPI
 import org.shapesafe.core.shape.Shape
 
 object S2_EinSum extends App {

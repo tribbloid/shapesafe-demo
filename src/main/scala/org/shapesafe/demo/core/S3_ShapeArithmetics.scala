@@ -1,9 +1,7 @@
 package org.shapesafe.demo.core
 
-import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.shape.Shape
-import org.shapesafe.core.shape.Names
+import org.shapesafe.core.shape.{Names, Shape}
 
 object S3_ShapeArithmetics extends App {
 
@@ -12,17 +10,17 @@ object S3_ShapeArithmetics extends App {
   def conv2D[
       S1 <: Shape,
       S2 <: Shape,
-      PAD <: Arity,
-      STR <: Arity
+      PAD <: Shape.Vector,
+      STRD <: Shape.Vector
   ](
       signal: S1,
       kernel: S2,
       padding: PAD,
-      stride: STR
+      stride: STRD
   ) = {
 
-    val _padding = (Shape >|< padding >|< padding).withNames(ij)
-    val _stride = (Shape >|< stride >|< stride).withNames(ij)
+    val _padding = (padding >< padding).withNames(ij)
+    val _stride = (stride >< stride).withNames(ij)
 
     signal
       .withNames(ij)
@@ -35,7 +33,7 @@ object S3_ShapeArithmetics extends App {
   val kernel = Shape(3, 3)
 
 //  val s2 = conv2D(s1, kernel, Arity.fromSInt(1), Arity.fromSInt(2))
-  val s2 = conv2D(s1, kernel, Arity(1), Arity(2))
+  val s2 = conv2D(s1, kernel, Shape(1), Shape(2))
   println(s2)
 
   val s2E = s2.eval
