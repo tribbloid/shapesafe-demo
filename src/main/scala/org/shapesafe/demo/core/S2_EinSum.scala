@@ -1,6 +1,5 @@
 package org.shapesafe.demo.core
 
-import org.shapesafe.core.arity.ArityAPI
 import org.shapesafe.core.shape.Shape
 
 object S2_EinSum extends App {
@@ -13,7 +12,7 @@ object S2_EinSum extends App {
     .named("i", "j", "channel")
     .einSum(
       s2.named("j", "k", "channel")
-    ) ->* ("i", "k", "channel")
+    ) -->* ("i", "k", "channel")
   println(m)
 
   val mE = m.eval
