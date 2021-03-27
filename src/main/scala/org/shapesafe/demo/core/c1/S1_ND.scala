@@ -1,9 +1,9 @@
-package org.shapesafe.demo.core
+package org.shapesafe.demo.core.c1
 
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
 
-object S1_NDTensor extends App {
+object S1_ND extends App {
 
 //  val s1 = Shape(3).named("i")
   val s1 = Shape(2).named("i")
