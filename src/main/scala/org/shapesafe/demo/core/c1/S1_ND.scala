@@ -5,8 +5,8 @@ import org.shapesafe.core.shape.Shape
 
 object S1_ND extends App {
 
+//  val s1 = Shape(3).named("i")
   val s1 = Shape(2).named("i")
-  // val s1 = Shape(2).named("i")
   val s2 = s1 >< s1
   val s3 = s2 >< s2
   val s4 = s3 >< s3
