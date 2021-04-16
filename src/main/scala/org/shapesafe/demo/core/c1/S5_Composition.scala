@@ -39,7 +39,7 @@ object S5_Composition extends App {
   val s2 = c3p1(s1, kernel, 0, 1, 2)
   println(s2)
 
-//  TypeVizCT.infer(s2).show
+  //  TypeVizCT.infer(s2).show
 
   val s2E = s2.eval
   println(s2E)

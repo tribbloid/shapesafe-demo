@@ -20,5 +20,7 @@ object S1_ND extends App {
   val flatE = flat.eval
   println(flatE)
 
+  // flat.peek
+
   flat.dot(Shape(256)).eval
 }
