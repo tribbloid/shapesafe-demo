@@ -37,12 +37,10 @@ object S5_Composition extends App {
   val kernel = Shape(3, 3)
 
   val s2 = c3p1(s1, kernel, 0, 1, 2)
-  println(s2)
-
-  //  TypeVizCT.infer(s2).show
+  // s2.peek
 
   val s2E = s2.eval
-  println(s2E)
+  // s2E.peek
 
-  s2E.shouldEqual(Shape(507, 507)).eval
+  s2E.elementWise(Shape(507, 507)).eval
 }

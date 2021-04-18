@@ -9,8 +9,10 @@ object S2_Named extends App {
 
   val x1 = s1.Sub("j")
   val x2 = s1.Sub(1)
+  val x3 = s1.Sub("k")
   val y = Shape(200)
 
-  println((x1 dot y).eval)
-  println((x2 dot y).eval)
+  // (x1 dot y).peek
+  // (x2 dot y).peek
+  // (x3 dot y).peek
 }

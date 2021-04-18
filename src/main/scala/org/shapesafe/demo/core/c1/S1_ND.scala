@@ -22,5 +22,5 @@ object S1_ND extends App {
 
   // flat.peek
 
-  flat.dot(Shape(256)).eval
+  flat.elementWise(Shape(256)).eval
 }

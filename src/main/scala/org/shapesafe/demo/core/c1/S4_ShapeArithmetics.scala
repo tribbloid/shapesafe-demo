@@ -32,10 +32,10 @@ object S4_ShapeArithmetics extends App {
   val kernel = Shape(3, 3)
 
   val s2 = conv2D(s1, kernel, 1, 2)
-  println(s2)
+  // s2.peek
 
   val s2E = s2.eval
-  println(s2E)
+  // s2E.peek
 
-  s2E.shouldEqual(Shape(511, 511)).eval
+  s2E.elementWise(Shape(511, 511)).eval
 }
