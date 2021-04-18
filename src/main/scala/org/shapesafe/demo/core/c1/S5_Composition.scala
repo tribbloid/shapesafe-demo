@@ -27,8 +27,8 @@ object S5_Composition extends App {
     val c2 = conv(c1)
     val c3 = conv(c2)
 
-    val _pooling = (pooling >< pooling).withNames(ij)
-    val p1 = c3.withNames(ij).flattenWith(ArityOps.:/, _pooling)
+    val _pooling = (pooling >< pooling).namedWith(ij)
+    val p1 = c3.namedWith(ij).flattenWith(ArityOps.:/, _pooling)
 
     p1
   }

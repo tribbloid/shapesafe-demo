@@ -16,12 +16,12 @@ object S4_ShapeArithmetics extends App {
 
 //    TypeVizCT[padding._Shape].show
 
-    val _padding = (padding >< padding).withNames(ij)
-    val _stride = (stride >< stride).withNames(ij)
+    val _padding = (padding >< padding).namedWith(ij)
+    val _stride = (stride >< stride).namedWith(ij)
 
     val result = in
-      .withNames(ij)
-      .flattenWith(ArityOps.:-, kernel.withNames(ij))
+      .namedWith(ij)
+      .flattenWith(ArityOps.:-, kernel.namedWith(ij))
       .flattenWith(ArityOps.:+, _padding)
       .flattenWith(ArityOps.:/, _stride)
 
