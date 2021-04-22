@@ -12,14 +12,15 @@ object S2_Named extends App {
   val x3 = s1.Sub("k")
   val y = Shape(200)
 
-  (x1 elementWise y).eval
-  (x2 elementWise y).eval
+  (x1 elementWise y) //.peek
+  (x2 elementWise y) //.peek
   // (x3 elementWise y).eval
 
   val m1 = s1.transpose("i", "j")
   val m2 = s1.transpose("j", "k")
 
-//  m2.matMul(m1).eval
-//  m1.matMul(m1).eval
-  m1.matMul(m2).eval
+  //  m2.matMul(m1).eval
+  //  m1.matMul(m1).eval
+  val r = m1.matMul(m2).eval
+  r.peek
 }

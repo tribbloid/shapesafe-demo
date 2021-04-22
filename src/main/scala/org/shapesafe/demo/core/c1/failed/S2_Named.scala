@@ -15,6 +15,7 @@ val y = Shape(200)
 
 println((x1 dot y).eval)
 println((x2 dot y).eval)
-"""
+""",
+    ".*"
   )
 }

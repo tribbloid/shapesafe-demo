@@ -7,20 +7,17 @@ object S1_ND extends App {
 
   // val s1 = Shape(3).named("i")
   val s1 = Shape(2).named("i")
+//  s1.peek
+
   val s2 = s1 >< s1
   val s3 = s2 >< s2
   val s4 = s3 >< s3
-
-  println(s4)
+//  s4.peek
 
   val s4E = s4.eval
-  println(s4E)
+//  s4E.peek
 
-  val flat = s4.flatten(ArityOps.:*)
-  val flatE = flat.eval
-  println(flatE)
-
-  // flat.peek
+  val flat = s4E.flatten(ArityOps.:*).eval.peek
 
   flat.elementWise(Shape(256)).eval
 }

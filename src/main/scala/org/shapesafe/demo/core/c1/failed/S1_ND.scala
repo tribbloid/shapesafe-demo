@@ -23,7 +23,8 @@ val flat = s4.flatten(ArityOps.:*)
 val flatE = flat.eval
 println(flatE)
 
-flat.dot(Shape(256)).eval
-"""
+flat.elementWise(Shape(256)).eval
+""",
+    ".*"
   )
 }
