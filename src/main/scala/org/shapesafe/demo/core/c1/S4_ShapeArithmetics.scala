@@ -34,8 +34,7 @@ object S4_ShapeArithmetics extends App {
   val s2 = conv2D(s1, kernel, 1, 2)
 //  s2.peek
 
-  val s2E = s2.eval
-  s2E.peek
+  val s2E = s2.peek
 
   s2E.elementWise(Shape(511, 511)).eval
 }

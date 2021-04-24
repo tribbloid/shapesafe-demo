@@ -15,6 +15,5 @@ object S3_EinSum extends App {
     ) -->* ("i", "k", "channel")
 //  m.peek
 
-  val mE = m.eval
-  mE.peek
+  val mE = m.peek
 }

@@ -2,7 +2,6 @@ package org.shapesafe.demo.core.c1
 
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.{Names, Shape, ShapeAPI}
-import org.shapesafe.demo.core.c1.S5_Composition.s2
 
 // TODO: compilation for such complex proof is seriously slow
 //  can scala compiler uses GPU?
@@ -39,8 +38,7 @@ object S5_Composition extends App {
 
   val s2 = c3p1(s1, kernel, 0, 1, 2)
 
-  val s2E = s2.eval
-  s2E.peek
+  val s2E = s2.peek
 
   s2E.elementWise(Shape(507, 507)).eval
 }
