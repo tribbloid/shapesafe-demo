@@ -17,7 +17,7 @@ object S1_ND extends App {
   val s4E = s4.eval
 //  s4E.peek
 
-  val flat = s4E.flatten(ArityOps.:*).peek
+  val flat = s4E.flatten(ArityOps.:*).reason
 
   flat.elementWise(Shape(256)).eval
 }

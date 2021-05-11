@@ -21,5 +21,5 @@ object S2_Named extends App {
 
   //  m2.matMul(m1).eval
   //  m1.matMul(m1).eval
-  val r = m1.matMul(m2).peek
+  val r = m1.matMul(m2).reason
 }

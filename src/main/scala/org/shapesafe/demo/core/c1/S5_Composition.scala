@@ -38,7 +38,7 @@ object S5_Composition extends App {
 
   val s2 = c3p1(s1, kernel, 0, 1, 2)
 
-  val s2E = s2.eval.peek
+  val s2E = s2.eval.reason
 
   s2E.elementWise(Shape(507, 507)).eval
 }

@@ -26,8 +26,7 @@ lazy val root = project
 /// settings
 
 lazy val commonSettings = Def.settings(
-  compileSettings,
-  scaladocSettings
+  compileSettings
 )
 
 lazy val compileSettings = Def.settings(
@@ -83,16 +82,6 @@ lazy val compileSettings = Def.settings(
         )
     }
   }
-)
-
-lazy val scaladocSettings = Def.settings(
-  scalacOptions in (Compile, doc) ++= Seq(
-    "-doc-source-url",
-    scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
-    "-sourcepath",
-    baseDirectory.in(LocalRootProject).value.getAbsolutePath
-  ),
-  autoAPIMappings := true
 )
 
 // lazy val miscSettings = Def.settings(
