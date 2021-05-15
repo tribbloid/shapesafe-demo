@@ -4,7 +4,7 @@ import org.shapesafe.core.shape.Shape
 
 object S2_Named extends App {
 
-  val s1 = Shape(100, 200, 3).named("i", "j", "k")
+  val s1 = Shape(100, 200, 3).named("i", "j")
 
   val x1 = s1.Sub("j")
   val x2 = s1.Sub(1)
@@ -13,7 +13,7 @@ object S2_Named extends App {
   (x2 elementWise Shape(200)).reason
 
   val x3 = s1.Sub("k")
-  (x2 elementWise Shape(200)).reason
+  (x3 elementWise Shape(200)).reason
 
   val m1 = s1.transpose("i", "j")
   val m2 = s1.transpose("j", "k")

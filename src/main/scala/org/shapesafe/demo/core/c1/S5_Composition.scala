@@ -33,10 +33,10 @@ object S5_Composition extends App {
     p1
   }
 
-  val s1 = Shape(1024, 768)
+  val s1 = Shape(1024, 1024)
   val kernel = Shape(3, 3)
 
   val s2 = c3p1(s1, kernel, 0, 1, 2).reason
 
-  s2.elementWise(Shape(507, 379)).reason
+  s2.named("i", "i").einSum.-->*("i").reason
 }
