@@ -13,10 +13,10 @@ object S2_Named extends App {
   (x2 elementWise Shape(200)).reason
 
   val x3 = s1.Sub("k")
-  (x3 elementWise Shape(3)).reason
+  (x2 elementWise Shape(200)).reason
 
   val m1 = s1.transpose("i", "j")
   val m2 = s1.transpose("j", "k")
 
-  m1.matMul(m2).reason
+  m2.matMul(m1).reason
 }

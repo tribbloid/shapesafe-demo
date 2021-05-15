@@ -5,7 +5,7 @@ import org.shapesafe.core.shape.Shape
 
 object S1_ND extends App {
 
-  val s1 = Shape(2).named("i")
+  val s1 = Shape(3).named("i")
   s1.reason
 
   val s2 = s1 >< s1

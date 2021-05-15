@@ -29,9 +29,9 @@ object S4_ShapeArithmetics extends App {
   val s1 = Shape(1024, 768)
   val kernel = Shape(3, 3)
 
-  val s2 = conv2D(s1, kernel, 1, 2)
+  val s2 = conv2D(s1, kernel, 1, 0)
 
   val s2E = s2.reason
 
-  s2E.elementWise(Shape(511, 383)).reason
+  s2E.elementWise(Shape(511, 511)).reason
 }

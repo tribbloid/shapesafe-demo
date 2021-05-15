@@ -3,8 +3,6 @@ package org.shapesafe.demo.core.c1
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.{Names, Shape, ShapeAPI}
 
-// TODO: compilation for such complex proof is seriously slow
-//  can scala compiler uses GPU?
 object S5_Composition extends App {
 
   import S4_ShapeArithmetics.conv2D
@@ -38,5 +36,5 @@ object S5_Composition extends App {
 
   val s2 = c3p1(s1, kernel, 0, 1, 2).reason
 
-  s2.elementWise(Shape(507, 379)).reason
+  s2.elementWise(Shape(507, 380)).reason
 }
