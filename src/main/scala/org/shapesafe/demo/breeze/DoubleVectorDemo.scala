@@ -1,6 +1,6 @@
 package org.shapesafe.demo.breeze
 
-import com.tribbloids.graph.commons.util.debug.print_@
+import org.shapesafe.graph.commons.util.debug.print_@
 import org.shapesafe.breeze.tensor.DoubleVector
 import org.shapesafe.core.arity.Arity
 
