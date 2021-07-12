@@ -33,5 +33,5 @@ object S4_ShapeArithmetics extends App {
 
   val s2E = s2.reason
 
-  s2E.elementWise(Shape(511, 511)).reason
+  s2E.requireEqual(Shape(511, 511)).reason
 }

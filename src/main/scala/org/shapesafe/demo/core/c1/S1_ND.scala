@@ -15,5 +15,5 @@ object S1_ND extends App {
   val s4E = s4.reason
   val flatten = s4E.flatten(ArityOps.:*).reason
 
-  flatten.elementWise(Shape(256)).reason
+  flatten.requireEqual(Shape(256)).reason
 }
