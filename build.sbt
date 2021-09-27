@@ -25,6 +25,7 @@ lazy val commonSettings = Def.settings(
   compileSettings
 )
 
+// TODO: I see no point in maintaining an independent sbt profile, should discard it after gradle 7.3
 lazy val compileSettings = Def.settings(
   scalaOrganization := "org.scala-lang",
   scalacOptions ++= Seq(
