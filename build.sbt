@@ -70,7 +70,7 @@ lazy val compileSettings = Def.settings(
       // https://github.com/scala/scala/pull/6606
       case Some((2, v)) if v >= 13 =>
         Seq()
-      case v @ _ =>
+      case _ =>
 //        println(v)
         Seq(
           compilerPlugin(
@@ -78,5 +78,27 @@ lazy val compileSettings = Def.settings(
           )
         )
     }
+  },
+  // for demo environment only, should be disabled in CI
+  Compile / unmanagedSourceDirectories += {
+
+    // sourceDirectory.value / "shouldSucceed" / "scala"
+
+    sourceDirectory.value / "presentation" / "scala"
+    // sourceDirectory.value / "shouldFail" / "scala"
+  },
+  // enable splain plugin
+  libraryDependencies += {
+    val v = "1.0.0-SNAPSHOT"
+    println(s"using splain $v")
+    compilerPlugin(
+      "io.tryp" %% "splain" % v cross CrossVersion.patch
+    )
+  },
+  scalacOptions ++= {
+    Seq(
+      "-Vimplicits",
+      "-Vimplicits-verbose-tree"
+    )
   }
 )
