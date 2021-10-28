@@ -6,4 +6,4 @@ FWDIR="$(
 )"
 
 cd ${FWDIR} && \
-sbt clean package
+sbt clean package -DbuildProfile=ci

@@ -21,9 +21,52 @@ lazy val root = project
 
 /// settings
 
-lazy val commonSettings = Def.settings(
-  compileSettings
-)
+lazy val commonSettings = {
+
+  var result = Def.settings(compileSettings)
+
+  Option(System.getProperty("buildProfile"))
+    .map(_.toLowerCase())
+    .getOrElse("") match {
+
+    case "" =>
+      // for demo environment only, should be disabled in CI
+      result ++= Def.settings(
+        Compile / unmanagedSourceDirectories ++= {
+
+          Seq(
+            sourceDirectory.value / "shouldSucceed" / "scala",
+            sourceDirectory.value / "presentation" / "scala"
+            // sourceDirectory.value / "shouldFail" / "scala"
+          )
+        },
+        // enable splain plugin
+        libraryDependencies += {
+          val v = "1.0.0-SNAPSHOT"
+          println(s"using splain $v")
+          compilerPlugin(
+            "io.tryp" %% "splain" % v cross CrossVersion.patch
+          )
+        },
+        scalacOptions ++= {
+          Seq(
+            "-Vimplicits",
+            "-Vimplicits-verbose-tree"
+          )
+        }
+      )
+
+    case "ci" =>
+      result ++= Def.settings(
+        Compile / unmanagedSourceDirectories += {
+
+          sourceDirectory.value / "shouldSucceed" / "scala"
+        }
+      )
+  }
+
+  result
+}
 
 // TODO: I see no point in maintaining an independent sbt profile, should discard it after gradle 7.3
 lazy val compileSettings = Def.settings(
@@ -78,27 +121,5 @@ lazy val compileSettings = Def.settings(
           )
         )
     }
-  },
-  // for demo environment only, should be disabled in CI
-  Compile / unmanagedSourceDirectories += {
-
-    // sourceDirectory.value / "shouldSucceed" / "scala"
-
-    sourceDirectory.value / "presentation" / "scala"
-    // sourceDirectory.value / "shouldFail" / "scala"
-  },
-  // enable splain plugin
-  libraryDependencies += {
-    val v = "1.0.0-SNAPSHOT"
-    println(s"using splain $v")
-    compilerPlugin(
-      "io.tryp" %% "splain" % v cross CrossVersion.patch
-    )
-  },
-  scalacOptions ++= {
-    Seq(
-      "-Vimplicits",
-      "-Vimplicits-verbose-tree"
-    )
   }
 )
