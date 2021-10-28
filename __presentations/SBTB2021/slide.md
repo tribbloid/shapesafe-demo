@@ -373,11 +373,11 @@ SquashByName[ / ]#On[
 
 # Proudly Supported By
 
-## **DataPassports™**, the Data Privacy & Trust Company
+## ![dp h:150](../asset/dp.png) **™**, the Data Privacy & Trust Company
 
 - We are hiring! Looking for a director of engineering
 
-## **Splain Open-Source Team**
+## **Splain** Open-Source Team
 
 - Looking for scala compiler guru / type theorist as technical advisor
 - 1.0.0RC is close, looking for test users
