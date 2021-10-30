@@ -39,21 +39,21 @@ lazy val commonSettings = {
             sourceDirectory.value / "presentation" / "scala"
             // sourceDirectory.value / "shouldFail" / "scala"
           )
-        },
-        // enable splain plugin
-        libraryDependencies += {
-          val v = "1.0.0-SNAPSHOT"
-          println(s"using splain $v")
-          compilerPlugin(
-            "io.tryp" %% "splain" % v cross CrossVersion.patch
-          )
-        },
-        scalacOptions ++= {
-          Seq(
-            "-Vimplicits",
-            "-Vimplicits-verbose-tree"
-          )
         }
+        // enable splain plugin
+        // libraryDependencies += {
+        //   val v = "1.0.0-SNAPSHOT"
+        //   println(s"using splain $v")
+        //   compilerPlugin(
+        //     "io.tryp" %% "splain" % v cross CrossVersion.patch
+        //   )
+        // },
+        // scalacOptions ++= {
+        //   Seq(
+        //     "-Vimplicits",
+        //     "-Vimplicits-verbose-tree"
+        //   )
+        // }
       )
 
     case "ci" =>
