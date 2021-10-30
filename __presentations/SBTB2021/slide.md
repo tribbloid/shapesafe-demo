@@ -38,7 +38,7 @@ math: mathjax
 
 #### Maintainer of splain plugin ... *2021 ~*
 
-- Partially integrated with scala compiler 2.13.6+ `-Vimplicit -Vtype-diff`
+- Partially integrated with scala compiler 2.13.6+ `-Vimplicits -Vtype-diffs`
 
 ---
 
