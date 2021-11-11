@@ -36,5 +36,6 @@ object S5_Composition extends App {
 
   val s2 = c3p1(s1, kernel, 0, 1, 2).reason
 
+  c2.interrupt
   s2.named("i", "i").einSum.-->*("i").reason
 }

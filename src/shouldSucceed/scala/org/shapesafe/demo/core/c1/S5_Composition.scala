@@ -39,7 +39,5 @@
    val c2 = c3p1(s1, kernel, 0, 1, 2)
    val s2 = c2.reason
 
-   c2.interrupt
-
    s2.named("i", "i").einSum.-->*("i").reason
  }
