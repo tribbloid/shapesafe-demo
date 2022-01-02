@@ -5,8 +5,6 @@ val projectName = "shapesafe-demo"
 val projectVersion = "0.1.0-SNAPSHOT"
 
 val macroParadiseVersion = "2.1.1"
-//val shapelessVersion = "2.3.3"
-//val scalaCheckVersion = "1.15.2"
 
 /// projects
 lazy val root = project
