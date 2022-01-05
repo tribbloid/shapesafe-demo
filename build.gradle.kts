@@ -2,7 +2,6 @@ val vs: Versions = versions()
 
 dependencies {
 
-    implementation(project(":verify:djl"))
-    implementation(project(":verify:breeze"))
+    implementation(project(":core"))
     testApi(testFixtures(project(":macro")))
 }

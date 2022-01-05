@@ -1,4 +1,4 @@
-package org.shapesafe.demo.core.c2
+package org.shapesafe.demo.core.presentation
 
 import org.shapesafe.core.shape.Shape
 

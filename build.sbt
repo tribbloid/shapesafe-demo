@@ -33,9 +33,9 @@ lazy val commonSettings = {
         Compile / unmanagedSourceDirectories ++= {
 
           Seq(
-            sourceDirectory.value / "shouldSucceed" / "scala",
-            sourceDirectory.value / "presentation" / "scala"
-            // sourceDirectory.value / "shouldFail" / "scala"
+            sourceDirectory.value / "presentation" / "scala",
+            sourceDirectory.value / "complex" / "scala"
+            // sourceDirectory.value / "presentation" / "scala"
           )
         }
         // enable splain plugin
@@ -59,7 +59,7 @@ lazy val commonSettings = {
       settings ++= Def.settings(
         Compile / unmanagedSourceDirectories += {
 
-          sourceDirectory.value / "shouldSucceed" / "scala"
+          sourceDirectory.value / "complex" / "scala"
         }
       )
   }
@@ -102,9 +102,7 @@ lazy val compileSettings = Def.settings(
   Test / console / scalacOptions -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
-    "org.shapesafe" % "shapesafe-djl" % projectVersion,
-    "org.shapesafe" % "shapesafe-breeze" % projectVersion
-    // "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
+    "org.shapesafe" % "shapesafe-core" % projectVersion
   ),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
