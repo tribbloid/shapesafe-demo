@@ -102,7 +102,7 @@ lazy val compileSettings = Def.settings(
   Test / console / scalacOptions -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
-    "org.shapesafe" % "shapesafe-core" % projectVersion
+    "org.shapesafe" %% "shapesafe-core" % projectVersion
   ),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
