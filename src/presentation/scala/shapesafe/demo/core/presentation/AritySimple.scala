@@ -1,6 +1,6 @@
-package org.shapesafe.demo.core.presentation
+package shapesafe.demo.core.presentation
 
-import org.shapesafe.core.arity.Arity
+import shapesafe.core.arity.Arity
 
 object AritySimple extends App {
 

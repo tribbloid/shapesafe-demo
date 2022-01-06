@@ -1,6 +1,6 @@
-package org.shapesafe.demo.core.c1
+package shapesafe.demo.core.c1
 
-import org.shapesafe.core.shape.Shape
+import shapesafe.core.shape.Shape
 
 object S3_EinSum extends App {
 

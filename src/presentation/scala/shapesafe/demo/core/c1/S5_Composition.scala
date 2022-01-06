@@ -1,7 +1,7 @@
-package org.shapesafe.demo.core.c1
+package shapesafe.demo.core.c1
 
-import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.shape.{Names, Shape, ShapeAPI}
+import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.shape.{Names, Shape, ShapeAPI}
 
 object S5_Composition extends App {
 

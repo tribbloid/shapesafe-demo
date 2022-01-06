@@ -1,10 +1,10 @@
-package org.shapesafe.demo.core.c1
+package shapesafe.demo.core.c1
 
-import org.shapesafe.core.shape.Shape
+import shapesafe.core.shape.Shape
 
 object S2_Named extends App {
 
-  val s1 = Shape(100, 200, 3).named("i", "j")
+  val s1 = Shape(100, 200, 3).named("i", "j", "k")
 
   val x1 = s1.Sub("j")
   val x2 = s1.Sub(1)
@@ -13,10 +13,10 @@ object S2_Named extends App {
   (x2 requireEqual Shape(200)).reason
 
   val x3 = s1.Sub("k")
-  (x3 requireEqual Shape(200)).reason
+  (x3 requireEqual Shape(3)).reason
 
   val m1 = s1.transpose("i", "j")
   val m2 = s1.transpose("j", "k")
 
-  m2.matMul(m1).reason
+  m1.matMul(m2).reason
 }

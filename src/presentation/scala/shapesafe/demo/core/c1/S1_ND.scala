@@ -1,7 +1,7 @@
-package org.shapesafe.demo.core.c1
+package shapesafe.demo.core.c1
 
-import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.shape.Shape
+import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.shape.Shape
 
 object S1_ND extends App {
 

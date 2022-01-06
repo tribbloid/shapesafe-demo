@@ -1,6 +1,6 @@
-package org.shapesafe.demo.core.presentation
+package shapesafe.demo.core.presentation
 
-import org.shapesafe.core.shape.Shape
+import shapesafe.core.shape.Shape
 
 object ShapeSimple extends App {
 

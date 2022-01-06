@@ -1,7 +1,7 @@
-package org.shapesafe.demo.core.c1
+package shapesafe.demo.core.c1
 
-import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.shape.{Names, Shape, ShapeAPI}
+import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.shape.{Names, Shape, ShapeAPI}
 
 object S4_ShapeArithmetics extends App {
 
@@ -29,9 +29,9 @@ object S4_ShapeArithmetics extends App {
   val s1 = Shape(1024, 768)
   val kernel = Shape(3, 3)
 
-  val s2 = conv2D(s1, kernel, 1, 2)
+  val s2 = conv2D(s1, kernel, 1, 0)
 
   val s2E = s2.reason
 
-  s2E.requireEqual(Shape(511, 383)).reason
+  s2E.requireEqual(Shape(511, 511)).reason
 }
