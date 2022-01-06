@@ -1,6 +1,6 @@
 scalaVersion := "2.13.6"
 
-val groupId = "org.shapesafe"
+val groupId = "ai.acyclic.shapesafe"
 val projectName = "shapesafe-demo"
 val projectVersion = "0.1.0-SNAPSHOT"
 
@@ -102,7 +102,7 @@ lazy val compileSettings = Def.settings(
   Test / console / scalacOptions -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-compiler" % scalaVersion.value,
-    "org.shapesafe" %% "shapesafe-core" % projectVersion
+    "ai.acyclic.shapesafe" %% "shapesafe-core" % projectVersion
   ),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
