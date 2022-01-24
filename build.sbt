@@ -33,33 +33,32 @@ lazy val commonSettings = {
         Compile / unmanagedSourceDirectories ++= {
 
           Seq(
-            sourceDirectory.value / "presentation" / "scala",
-            sourceDirectory.value / "complex" / "scala"
-            // sourceDirectory.value / "presentation" / "scala"
+            sourceDirectory.value / "main" / "scala-shouldFail",
+            sourceDirectory.value / "main" / "scala-complex"
           )
         }
         // enable splain plugin
-        ,
-        libraryDependencies += {
-          val v = "1.0.0-SNAPSHOT"
-          println(s"using splain $v")
-          compilerPlugin(
-            "io.tryp" %% "splain" % v cross CrossVersion.patch
-          )
-        },
-        scalacOptions ++= {
-          Seq(
-            "-Vimplicits",
-            "-Vimplicits-verbose-tree"
-          )
-        }
+        // ,
+        // libraryDependencies += {
+        //   val v = "1.0.0-SNAPSHOT"
+        //   println(s"using splain $v")
+        //   compilerPlugin(
+        //     "io.tryp" %% "splain" % v cross CrossVersion.patch
+        //   )
+        // },
+        // scalacOptions ++= {
+        //   Seq(
+        //     "-Vimplicits",
+        //     "-Vimplicits-verbose-tree"
+        //   )
+        // }
       )
 
     case "ci" =>
       settings ++= Def.settings(
         Compile / unmanagedSourceDirectories += {
 
-          sourceDirectory.value / "complex" / "scala"
+          sourceDirectory.value / "main" / "scala-complex"
         }
       )
   }
