@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Names, Shape, ShapeAPI}
+import shapesafe.core.shape.{Shape, ShapeAPI}
 
 object ShowCase {
 
@@ -15,7 +15,7 @@ object ShowCase {
     val s4 = s3 >< s3
 
     val s4E = s4.reason
-    val flatten = s4E.flatten(Ops.:*).reason
+    val flatten = s4E.reduceByName(Ops.:*).reason
 
     flatten.requireEqual(Shape(6561)).reason
   }
@@ -24,14 +24,14 @@ object ShowCase {
 
     val channels = Shape(100, 200, 3).named("i", "j", "k")
 
-    val x1 = channels.Sub("j")
-    val x2 = channels.Sub(1)
+    val x1 = channels.select1("j")
+    val x2 = channels.select1(1)
 
     (x1 requireEqual Shape(200)).reason
     (x2 requireEqual Shape(200)).reason
 
-    val m1 = channels.transpose("i", "j")
-    val m2 = channels.transpose("j", "k")
+    val m1 = channels.select("i", "j")
+    val m2 = channels.select("j", "k")
 
     (m1 requireEqual Shape(100, 200)).reason
     m1.matMul(m2).reason
@@ -61,16 +61,13 @@ object ShowCase {
         stride: ShapeAPI
     ) = {
 
-      val ij = Names("i", "j")
-
-      val _padding = (padding >< padding).namedWith(ij)
-      val _stride = (stride >< stride).namedWith(ij)
+      val _padding = padding >< padding
+      val _stride = stride >< stride
 
       val result = in
-        .namedWith(ij)
-        .flattenWith(Ops.:-, kernel.namedWith(ij))
-        .flattenWith(Ops.:+, _padding)
-        .flattenWith(Ops.:/, _stride)
+        .foreachAxis(Ops.:-, kernel)
+        .foreachAxis(Ops.:+, _padding)
+        .foreachAxis(Ops.:/, _stride)
 
       result
     }
