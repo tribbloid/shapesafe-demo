@@ -1,6 +1,6 @@
 package shapesafe.demo.core
 
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.{Names, Shape, ShapeAPI}
 
 // TODO: compilation for such complex proof is seriously slow
@@ -30,7 +30,7 @@ object ShowCase_Complex {
       val c3 = conv(c2)
 
       val _pooling = (pooling >< pooling).namedWith(ij)
-      val p1 = c3.namedWith(ij).flattenWith(ArityOps.:/, _pooling)
+      val p1 = c3.namedWith(ij).flattenWith(Ops.:/, _pooling)
 
       p1
     }

@@ -1,6 +1,6 @@
 package shapesafe.demo.core
 
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.{Names, Shape, ShapeAPI}
 
 object ShowCase {
@@ -15,7 +15,7 @@ object ShowCase {
     val s4 = s3 >< s3
 
     val s4E = s4.reason
-    val flatten = s4E.flatten(ArityOps.:*).reason
+    val flatten = s4E.flatten(Ops.:*).reason
 
     flatten.requireEqual(Shape(6561)).reason
   }
@@ -68,9 +68,9 @@ object ShowCase {
 
       val result = in
         .namedWith(ij)
-        .flattenWith(ArityOps.:-, kernel.namedWith(ij))
-        .flattenWith(ArityOps.:+, _padding)
-        .flattenWith(ArityOps.:/, _stride)
+        .flattenWith(Ops.:-, kernel.namedWith(ij))
+        .flattenWith(Ops.:+, _padding)
+        .flattenWith(Ops.:/, _stride)
 
       result
     }

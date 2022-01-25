@@ -320,7 +320,7 @@ SquashByName[ / ]#On[
               SquashByName[ / ]#On[
                 SquashByName[ + ]#On[
                   SquashByName[ - ]#On[
-                    1024 >< 1024 |<<- (i >< j) >< (3 >< 3 |<<- (i >< j))...
+                    1024 >< 1024 :<<= (i >< j) >< (3 >< 3 :<<= (i >< j))...
 ```
 
 ---
