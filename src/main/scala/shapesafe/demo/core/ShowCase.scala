@@ -65,9 +65,9 @@ object ShowCase {
       val _stride = stride >< stride
 
       val result = in
-        .foreachAxis(Ops.:-, kernel)
-        .foreachAxis(Ops.:+, _padding)
-        .foreachAxis(Ops.:/, _stride)
+        .applyPerDim(Ops.:-, kernel)
+        .applyPerDim(Ops.:+, _padding)
+        .applyPerDim(Ops.:/, _stride)
 
       result
     }

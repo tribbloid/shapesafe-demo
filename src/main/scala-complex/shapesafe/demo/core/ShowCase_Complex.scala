@@ -30,7 +30,7 @@ object ShowCase_Complex {
       val c3 = conv(c2)
 
       val _pooling = (pooling >< pooling)
-      val p1 = Ops.:/.foreachAxis(c3.namedBy(ij), _pooling)
+      val p1 = Ops.:/.applyPerDim(c3.namedBy(ij), _pooling)
 
       p1
     }
