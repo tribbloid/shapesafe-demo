@@ -29,8 +29,8 @@ object ShowCase_Complex {
       val c2 = conv(c1)
       val c3 = conv(c2)
 
-      val _pooling = (pooling >< pooling).namedBy(ij)
-      val p1 = c3.namedBy(ij).flattenWith(Ops.:/, _pooling)
+      val _pooling = (pooling >< pooling)
+      val p1 = Ops.:/.foreachAxis(c3.namedBy(ij), _pooling)
 
       p1
     }
