@@ -48,6 +48,20 @@ object ShowCase_Error {
     }
   }
 
+  object KroneckerProduct {
+
+    import ShowCase.KroneckerProduct._
+
+    val einsum = {
+      Ops.EinSum(
+        kProd :<<=* ("t", "x"),
+        downsample :<<=* ("x", "y")
+      ) -->* ("t", "y")
+    }
+
+    einsum.reason
+  }
+
   object ShapeArithmetics {
     import ShowCase.ShapeArithmetics._
 

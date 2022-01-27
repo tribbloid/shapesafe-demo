@@ -27,11 +27,11 @@ object ShowCase {
     val x1 = channels.select1("j")
     val x2 = channels.select1(1)
 
-    (x1 requireEqual Shape(200)).reason
-    (x2 requireEqual Shape(200)).reason
-
     val m1 = channels.select("i", "j")
     val m2 = channels.select("j", "k")
+
+    (x1 requireEqual Shape(200)).reason
+    (x2 requireEqual Shape(200)).reason
 
     (m1 requireEqual Shape(100, 200)).reason
     m1.matMul(m2).reason
@@ -40,7 +40,6 @@ object ShowCase {
   object EinSum {
 
     val s1 = Shape(999999, 8, 3)
-
     val s2 = Shape(8, 361, 3)
 
     val m = s1
@@ -50,6 +49,25 @@ object ShowCase {
       ) -->* ("i", "k", "channel")
 
     m.reason
+  }
+
+  object KroneckerProduct {
+
+    val s1 = Shape(1024, 8)
+    val upsample = Shape(2, 27)
+
+    val downsample = Shape(8, 216)
+
+    val kProd = (Ops.:*.applyByDim(s1, upsample))
+
+    val einsum = {
+      Ops.EinSum(
+        kProd :<<=* ("t", "x"),
+        downsample :<<=* ("y", "x")
+      ) -->* ("t", "y")
+    }
+
+    einsum.reason
   }
 
   object ShapeArithmetics {
