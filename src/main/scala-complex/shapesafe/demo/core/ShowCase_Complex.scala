@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Names, Shape, ShapeAPI}
+import shapesafe.core.shape.{Names, ShapeType, Shape}
 
 // TODO: compilation for such complex proof is seriously slow
 //  can scala compiler uses GPU?
@@ -12,16 +12,16 @@ object ShowCase_Complex {
     import ShowCase.ShapeArithmetics.conv2D
 
     def c3p1(
-        in: ShapeAPI,
-        kernel: ShapeAPI,
-        padding: ShapeAPI,
-        stride: ShapeAPI,
-        pooling: ShapeAPI
+              in: Shape,
+              kernel: Shape,
+              padding: Shape,
+              stride: Shape,
+              pooling: Shape
     ) = {
 
       val ij = Names("i", "j")
 
-      def conv(in: ShapeAPI) = {
+      def conv(in: Shape) = {
         conv2D(in, kernel, padding, stride)
       }
 

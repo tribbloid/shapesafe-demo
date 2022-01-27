@@ -1,8 +1,8 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.arity.Arity
-import shapesafe.core.shape.{Names, Shape, ShapeAPI}
+import shapesafe.core.arity.ArityType
+import shapesafe.core.shape.{Names, ShapeType, Shape}
 
 object ArityOperators {
 

@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Shape, ShapeAPI}
+import shapesafe.core.shape.Shape
 
 object ShowCase {
 
@@ -55,10 +55,10 @@ object ShowCase {
   object ShapeArithmetics {
 
     def conv2D(
-        in: ShapeAPI,
-        kernel: ShapeAPI,
-        padding: ShapeAPI,
-        stride: ShapeAPI
+        in: Shape,
+        kernel: Shape,
+        padding: Shape,
+        stride: Shape
     ) = {
 
       val _padding = padding >< padding
