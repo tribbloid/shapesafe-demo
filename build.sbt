@@ -110,7 +110,6 @@ lazy val compileSettings = Def.settings(
       case Some((2, v)) if v >= 13 =>
         Seq()
       case _ =>
-//        println(v)
         Seq(
           compilerPlugin(
             "org.scalamacros" % "paradise" % macroParadiseVersion cross CrossVersion.patch

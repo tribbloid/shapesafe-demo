@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Names, ShapeType, Shape}
+import shapesafe.core.shape.{Names, Shape}
 
 // TODO: compilation for such complex proof is seriously slow
 //  can scala compiler uses GPU?
