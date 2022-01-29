@@ -3,7 +3,7 @@ package shapesafe.demo.core
 import shapesafe.core.Ops
 import shapesafe.core.shape.{Names, Shape}
 
-object ShowCase_ErrorComplex {
+object ShowCase_RefuteComplex {
 
   object Composition {
     import ShowCase_Complex.Composition._
