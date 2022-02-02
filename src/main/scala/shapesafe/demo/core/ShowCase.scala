@@ -27,8 +27,8 @@ object ShowCase {
     val x1 = channels.select1("j")
     val x2 = channels.select1(1)
 
-    val m1 = channels.select("i", "j")
-    val m2 = channels.select("j", "k")
+    val m1 = channels.rearrange("i", "j")
+    val m2 = channels.rearrange("j", "k")
 
     (x1 requireEqual Shape(200)).reason
     (x2 requireEqual Shape(200)).reason
@@ -58,7 +58,7 @@ object ShowCase {
 
     val downsample = Shape(8, 216)
 
-    val kProd = (Ops.:*.applyByDim(s1, upsample))
+    val kProd = Ops.:*.applyByDim(s1, upsample)
 
     val einsum = {
       Ops.EinSum(
@@ -83,9 +83,9 @@ object ShowCase {
       val _stride = stride >< stride
 
       val result = in
-        .applyPerDim(Ops.:-, kernel)
-        .applyPerDim(Ops.:+, _padding)
-        .applyPerDim(Ops.:/, _stride)
+        .applyByDim(Ops.:-, kernel)
+        .applyByDim(Ops.:+, _padding)
+        .applyByDim(Ops.:/, _stride)
 
       result
     }
