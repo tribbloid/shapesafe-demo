@@ -6,19 +6,20 @@ import shapesafe.core.Ops
 
 object Tutorial {
 
+  val v0 = Arity(0)
   val v1 = Arity(1)
   val v2 = Arity(2)
   val v3 = Arity(3)
   val v4 = Arity(4)
   val vU = Arity.Unchecked
-  val vI = Arity.Unprovable
 
-  object PeekAndEval {
+  object CompileTimeReasoning {
 
     val expr = (v1 :+ v2) :* v3
-    val illegal = (v1 :+ vI)
+    val illegal = (v1 :/ v0)
 
     expr.peek
+    illegal.peek
 
     val result = expr.eval
     result.peek
@@ -85,16 +86,17 @@ object Tutorial {
       (v34 :<<= names).reason
 
       // short syntax for names construction
-      val namedV34 = (v34 :<<= Names("latitude", "longitude")).reason
+      val namedV34 = (v34 :<<= Names("lat", "lng")).reason
 
       // ... and assignment
-      (v34 :<<=* ("latitude", "longitude")).reason
+      (v34 :<<=* ("lat", "lng")).reason
 
       // misaliged dimension will be refuted
-      (v345 :<<=* ("latitude", "longitude")).reason
+      (v345 :<<=* ("lat", "lng")).reason
 
       // name(s) can be removed by assigning an empty string
       namedV34.:<<=*("", "").reason
+      namedV34.:<<=*("lat", "").reason
     }
 
     object Rearrange {
@@ -106,7 +108,7 @@ object Tutorial {
         )
         .reason
 
-      // ... cannot go out of index bound tho
+      // ... index cannot go out of bound tho
       v34
         .rearrangeBy(
           Indices >< Index.Left(2) >< Index.Left(1)
@@ -154,6 +156,9 @@ object Tutorial {
 
       // application on 2 tensors of different number of dimensions will be refuted
       Ops.:+.applyByDim(v34.transpose, v345).reason
+
+      // if you want to relax this condition, use:
+      Ops.:+.applyByDimDropLeft(v34.transpose, v345).reason
     }
 
     object ReduceByName {}
