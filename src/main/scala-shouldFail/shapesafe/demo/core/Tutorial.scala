@@ -199,9 +199,14 @@ object Tutorial {
 
     object OuterProduct {
 
+      // "><" is the basic operator that concatenate all dimensions together
       (v3 >< v4).reason
 
-      val x1 = (v3.:<<=*("x") >< v4.:<<=*("y")).reason
+      // ... while preserving their names
+      val x1 = (v34.:<<=*("x", "y") >< v345.:<<=*("i", "j", "k"))
+      x1.reason
+
+      // this can go arbitrarily long
       (x1 >< x1).reason
     }
 
