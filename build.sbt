@@ -40,7 +40,7 @@ lazy val commonSettings = {
         // enable splain plugin
         // ,
         // libraryDependencies += {
-        //   val v = "1.0.0-SNAPSHOT"
+        //   val v = "1.0.0"
         //   println(s"using splain $v")
         //   compilerPlugin(
         //     "io.tryp" %% "splain" % v cross CrossVersion.patch
