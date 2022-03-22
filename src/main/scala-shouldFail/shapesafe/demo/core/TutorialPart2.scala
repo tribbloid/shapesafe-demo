@@ -59,14 +59,14 @@ object TutorialPart2 {
       // by indices
       v34
         .rearrangeBy(
-          Indices >< Index.Left(1) >< Index.Left(0)
+          Indices >< Index.LtoR(1) >< Index.LtoR(0)
         )
         .reason
 
       // ... index cannot go out of bound tho
       v34
         .rearrangeBy(
-          Indices >< Index.Left(2) >< Index.Left(1)
+          Indices >< Index.LtoR(2) >< Index.LtoR(1)
         )
         .reason
 
