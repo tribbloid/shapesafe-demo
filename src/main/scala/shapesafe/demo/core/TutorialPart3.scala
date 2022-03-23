@@ -1,11 +1,8 @@
 package shapesafe.demo.core
 
 import shapesafe.core.Ops
-import shapesafe.core.arity.Arity
-import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.shape.Index.LtoR
-import shapesafe.core.shape.ShapeReasoning.PeekShape
-import shapesafe.core.shape.{Indices, LeafShape, Shape}
+import shapesafe.core.shape.{Indices, LeafShape, Shape, ShapeReasoning}
 
 object TutorialPart3 {
 
@@ -20,8 +17,8 @@ object TutorialPart3 {
 
       def into[LL <: Layer, O <: LeafShape](layer: LL)(
           implicit
-          prove: layer.ShapeOut[S]#_ShapeType |- O,
-          reporter: PeekShape.Case[layer.ShapeOut[S]#_ShapeType]
+          reporter: ShapeReasoning._Peek.Case[layer.ShapeOut[S]#_ShapeType],
+          prove: layer.ShapeOut[S]#_ShapeType |- O
       ): Tensor[Shape.^[O]] = {
         val proven = prove(layer.shapeOut[S](this).shapeType)
 
@@ -114,7 +111,6 @@ object TutorialPart3 {
         maxPool2 into
         flatten
 
-      flatten.shapeOp(Shape(3, 4, 5)).out.reason
     }
   }
 }

@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.shape.Index.LtoR
-import shapesafe.core.shape.ShapeReasoning.PeekShape
+import shapesafe.core.shape.ShapeReasoning._Peek
 import shapesafe.core.shape.{Indices, LeafShape, Shape}
 
 object TutorialPart3_Original {
@@ -20,7 +20,7 @@ object TutorialPart3_Original {
 
       def into[LL <: Layer, O <: LeafShape](layer: LL)(implicit
           prove: layer.ShapeOut[S]#_ShapeType |- O,
-          reporter: PeekShape.Case[O]
+          reporter: _Peek.Case[O]
       ): Tensor[Shape.^[O]] = {
         val proven = prove(layer.shapeOut[S](this).shapeType)
 
