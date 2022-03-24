@@ -15,13 +15,13 @@ object TutorialPart3 {
 
     trait Tensor {
 
-      val out: Shape
-      type Out >: out.type <: Shape
+      val shape: Shape
+      type _Shape >: shape.type <: Shape
 
-      def _out: Out = out
+      def _shape: _Shape = shape
 
-      def into[O <: LeafShape](layer: Layer): layer.ApplyT[Out] = {
-        val neo: layer.ApplyT[Out] = layer.apply(_out)
+      def into[O <: LeafShape](layer: Layer): layer.ApplyT[_Shape] = {
+        val neo: layer.ApplyT[_Shape] = layer.apply[this.type](this)
 
         neo
       }
@@ -29,30 +29,30 @@ object TutorialPart3 {
       def into_![O <: LeafShape](layer: Layer)(
           implicit
           //          to: layer.ShapeOut[S]#ReasonTo[O] // TODO: why this break?
-          evalTo: layer.ApplyShape[Out]#_ShapeType |-@- O
+          evalTo: layer.ApplyShape[_Shape]#_ShapeType |-@- O
       ): EagerTensor[Shape.^[O]] = {
-        val neo: layer.ApplyShape[Out] = layer.apply(_out)._out
+        val neo: layer.ApplyShape[_Shape] = layer.apply[this.type](this)._shape
         val proven: O = evalTo(neo.shapeType)
 
         EagerTensor(proven.^)
       }
     }
 
-    case class EagerTensor[S <: Shape](override val out: S) extends Tensor {
+    case class EagerTensor[S <: Shape](override val shape: S) extends Tensor {
 
-      override type Out = S
+      override type _Shape = S
+    }
+
+    trait LazyTensor extends Tensor {
+      override type _Shape = shape.type
     }
 
     trait Layer {
 
-      trait LazyTensor extends Tensor {
-        override type Out = out.type
-      }
-
       type ApplyT[I <: Shape] <: LazyTensor
-      def apply[I <: Shape](input: I): ApplyT[I]
+      def apply[T <: Tensor](input: T): ApplyT[T#_Shape]
 
-      type ApplyShape[I <: Shape] = ApplyT[I]#Out
+      type ApplyShape[I <: Shape] = ApplyT[I]#_Shape
     }
 
     case class Conv[OC <: LeafShape.Vector_](
@@ -61,7 +61,7 @@ object TutorialPart3 {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val out = {
+        val shape = {
 
           val ij = input
             .rearrangeBy(Indices >< LtoR(0) >< LtoR(1))
@@ -69,44 +69,62 @@ object TutorialPart3 {
         }
       }
 
-      override def apply[I <: Shape](input: I): ApplyT[I] =
-        ApplyT[I](input)
+      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+        ApplyT(input._shape)
     }
 
     case class Pooling() extends Layer {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val out = {
+        val shape = {
 
           val right = Shape(2, 2, 1)
           Ops.:/.applyByDim(input, right)
         }
       }
 
-      override def apply[I <: Shape](input: I): ApplyT[I] =
-        ApplyT[I](input)
+      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+        ApplyT(input._shape)
     }
 
     case class Flatten() extends Layer {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val out = {
+        val shape = {
 
           Ops.:*.reduceByName(input.:<<=*("i", "i", "i"))
         }
       }
 
-      override def apply[I <: Shape](input: I): ApplyT[I] =
-        ApplyT[I](input)
+      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+        ApplyT(input._shape)
     }
 
-    case class
+    case class FullyConnected[IS <: Shape, OS <: Shape](
+        in: IS,
+        out: OS
+    ) extends Layer {
+
+      case class ApplyT[I <: Shape](input: I) extends LazyTensor {
+
+        val shape = {
+
+          val empty = Ops.==!.applyByDim(input, in)
+            .rearrangeBy(Indices.Eye)
+
+          empty >< shape
+        }
+      }
+
+      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+        ApplyT(input._shape)
+    }
 
     {
       val data = EagerTensor(Shape(28, 28, 1))
-      data.out.reason
+      data.shape.reason
 
       val conv1 = Conv(Shape(6))
       val maxPool1 = Pooling()
@@ -116,12 +134,14 @@ object TutorialPart3 {
 
       val flatten = Flatten()
 
-      val ou0 = conv1.apply(data.out)
-      ou0._out.peek
+      val fc1 = FullyConnected(Shape(784), Shape(16))
+
+      val ou0 = conv1.apply(data)
+      ou0._shape.peek
 
       val ou1 = data into conv1
 
-      ou1._out.peek
+      ou1._shape.peek
 
       val output = data into_!
         conv1 into_!
@@ -129,6 +149,8 @@ object TutorialPart3 {
         conv2 into_!
         maxPool2 into_!
         flatten
+//      into_!
+//        fc1
 
     }
   }
