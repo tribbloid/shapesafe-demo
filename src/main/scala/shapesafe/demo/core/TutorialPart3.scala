@@ -6,9 +6,13 @@ import shapesafe.core.shape.{Indices, LeafShape, Shape}
 
 object TutorialPart3 {
 
-  // In this tutorial we will write a verifier for the Tensor typing example in:
-  // https://ai.facebook.com/blog/paving-the-way-for-software-20-with-kotlin/
-  // A 9-layer feedforward neural network
+  /*
+  In this tutorial we will write a verifier for the tensor typing example in:
+
+  https://ai.facebook.com/blog/paving-the-way-for-software-20-with-kotlin/
+
+  A 9-layer feedforward neural network
+   */
   object TensorTyping {
 
     import shapesafe.core.shape.ProveShape.AsLeafShape._
@@ -20,24 +24,25 @@ object TutorialPart3 {
 
       def _shape: _Shape = shape
 
-      def into[O <: LeafShape](layer: Layer): layer.ApplyT[_Shape] = {
-        val neo: layer.ApplyT[_Shape] = layer.apply[this.type](this)
+      def into(layer: Module): layer.ApplyT[_Shape] = {
+        val result: layer.ApplyT[_Shape] = layer(this)
 
-        neo
+        result
       }
 
-      def into_![O <: LeafShape](layer: Layer)(implicit
-          //          to: layer.ShapeOut[S]#ReasonTo[O] // TODO: why this break?
+      def into_![O <: LeafShape](layer: Module)(
+          implicit
+//          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this alternative to break
           evalTo: layer.ApplyShape[_Shape]#_ShapeType |-@- O
-      ): EagerTensor[Shape.^[O]] = {
-        val neo: layer.ApplyShape[_Shape] = layer.apply[this.type](this)._shape
-        val proven: O = evalTo(neo.shapeType)
+      ): Input[Shape.^[O]] = {
+        val unevaluated = into(layer)
+        val proven: O = evalTo(unevaluated._shape.shapeType)
 
-        EagerTensor(proven.^)
+        Input(proven.^)
       }
     }
 
-    case class EagerTensor[S <: Shape](override val shape: S) extends Tensor {
+    case class Input[S <: Shape.Leaf_](override val shape: S) extends Tensor {
 
       override type _Shape = S
     }
@@ -46,17 +51,17 @@ object TutorialPart3 {
       override type _Shape = shape.type
     }
 
-    trait Layer {
+    trait Module {
 
       type ApplyT[I <: Shape] <: LazyTensor
-      def apply[T <: Tensor](input: T): ApplyT[T#_Shape]
+      def apply(input: Tensor): ApplyT[input._Shape]
 
       type ApplyShape[I <: Shape] = ApplyT[I]#_Shape
     }
 
-    case class Conv[OC <: LeafShape.Vector_](
+    case class Conv2D[OC <: Shape.Leaf.Vector_](
         nChannel: OC
-    ) extends Layer {
+    ) extends Module {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
@@ -68,11 +73,11 @@ object TutorialPart3 {
         }
       }
 
-      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+      override def apply(input: Tensor): ApplyT[input._Shape] =
         ApplyT(input._shape)
     }
 
-    case class Pooling() extends Layer {
+    case class Pooling2D() extends Module {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
@@ -83,11 +88,11 @@ object TutorialPart3 {
         }
       }
 
-      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+      override def apply(input: Tensor): ApplyT[input._Shape] =
         ApplyT(input._shape)
     }
 
-    case class Flatten() extends Layer {
+    case class Flatten() extends Module {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
@@ -97,28 +102,27 @@ object TutorialPart3 {
         }
       }
 
-      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+      override def apply(input: Tensor): ApplyT[input._Shape] =
         ApplyT(input._shape)
     }
 
     case class FullyConnected[IS <: Shape, OS <: Shape](
         in: IS,
         out: OS
-    ) extends Layer {
+    ) extends Module {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
         val shape = {
 
-          val empty = Ops.==!.applyByDim(input, in)
-            .rearrangeBy(Indices.Eye)
+          val empty = Ops.==!.applyByDim(input, in).select0
 
           val result = empty >< out
           result
         }
       }
 
-      override def apply[T <: Tensor](input: T): ApplyT[T#_Shape] =
+      override def apply(input: Tensor): ApplyT[input._Shape] =
         ApplyT(input._shape)
     }
 
@@ -126,39 +130,29 @@ object TutorialPart3 {
       val data = EagerTensor(Shape(28, 28, 1))
       data.shape.reason
 
-      val conv1 = Conv(Shape(6))
-      val maxPool1 = Pooling()
+      val conv1 = Conv2D(Shape(6))
+      val maxPool1 = Pooling2D()
 
-      val conv2 = Conv(Shape(16))
-      val maxPool2 = Pooling()
+      val conv2 = Conv2D(Shape(16))
+      val maxPool2 = Pooling2D()
 
       val flatten = Flatten()
 
-      val fc1 = FullyConnected(Shape(784), Shape(16))
-
-      val ou0 = conv1.apply(data)
-      ou0._shape.peek
-
-      val ou1 = data into conv1
-
-      ou1._shape.peek
+      val fc1 = FullyConnected(Shape(784), Shape(120))
+      val fc2 = FullyConnected(Shape(120), Shape(84))
+      val fc3 = FullyConnected(Shape(84), Shape(10))
 
       val output = data into_!
         conv1 into_!
         maxPool1 into_!
         conv2 into_!
         maxPool2 into_!
-        flatten
-
-      fc1.in.peek
+        flatten into_!
+        fc1 into_!
+        fc2 into_!
+        fc3
 
       output.shape.peek
-
-      val out2 = output into
-        fc1
-
-      out2.shape.peek
-
     }
   }
 }
