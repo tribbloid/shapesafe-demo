@@ -2,7 +2,7 @@ package shapesafe.demo.core
 
 import shapesafe.core.Ops
 import shapesafe.core.shape.Index.LtoR
-import shapesafe.core.shape.{Indices, LeafShape, Shape, ShapeReasoning}
+import shapesafe.core.shape.{Indices, LeafShape, Shape}
 
 object TutorialPart3 {
 
@@ -11,47 +11,57 @@ object TutorialPart3 {
   // A 9-layer feedforward neural network
   object TensorTyping {
 
-    case class Tensor[S <: Shape](shape: S) {
+    import shapesafe.core.shape.ProveShape.AsLeafShape._
 
-      import shapesafe.core.shape.ProveShape.|-
+    trait Tensor {
 
-      def into[LL <: Layer, O <: LeafShape](layer: LL)(
+      val out: Shape
+      type Out >: out.type <: Shape
+
+      def _out: Out = out
+
+      def into[O <: LeafShape](layer: Layer): layer.ApplyT[Out] = {
+        val neo: layer.ApplyT[Out] = layer.apply(_out)
+
+        neo
+      }
+
+      def into_![O <: LeafShape](layer: Layer)(
           implicit
-          reporter: ShapeReasoning._Peek.Case[layer.ShapeOut[S]#_ShapeType],
-          prove: layer.ShapeOut[S]#_ShapeType |- O
-      ): Tensor[Shape.^[O]] = {
-        val proven = prove(layer.shapeOut[S](this).shapeType)
+          //          to: layer.ShapeOut[S]#ReasonTo[O] // TODO: why this break?
+          evalTo: layer.ApplyShape[Out]#_ShapeType |-@- O
+      ): EagerTensor[Shape.^[O]] = {
+        val neo: layer.ApplyShape[Out] = layer.apply(_out)._out
+        val proven: O = evalTo(neo.shapeType)
 
-        Tensor(Shape.^(proven))
+        EagerTensor(proven.^)
       }
     }
 
-    trait NewShape {
+    case class EagerTensor[S <: Shape](override val out: S) extends Tensor {
 
-      val _shape: Shape
-
-      final type Out = _shape.type
-      def out: Out = _shape
+      override type Out = S
     }
 
     trait Layer {
 
-      type ShapeOp[I <: Shape] <: NewShape
-      def shapeOp[I <: Shape](input: I): ShapeOp[I]
+      trait LazyTensor extends Tensor {
+        override type Out = out.type
+      }
 
-      final type ShapeOut[I <: Shape] = ShapeOp[I]#Out
-      final def shapeOut[I <: Shape](tensor: Tensor[I]): ShapeOut[I] = shapeOp(
-        tensor.shape
-      ).out
+      type ApplyT[I <: Shape] <: LazyTensor
+      def apply[I <: Shape](input: I): ApplyT[I]
+
+      type ApplyShape[I <: Shape] = ApplyT[I]#Out
     }
 
     case class Conv[OC <: LeafShape.Vector_](
         oChannel: OC
     ) extends Layer {
 
-      case class ShapeOp[I <: Shape](input: I) extends NewShape {
+      case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val _shape = {
+        val out = {
 
           val ij = input
             .rearrangeBy(Indices >< LtoR(0) >< LtoR(1))
@@ -59,42 +69,44 @@ object TutorialPart3 {
         }
       }
 
-      override def shapeOp[I <: Shape](input: I): ShapeOp[I] =
-        ShapeOp[I](input)
+      override def apply[I <: Shape](input: I): ApplyT[I] =
+        ApplyT[I](input)
     }
 
     case class Pooling() extends Layer {
 
-      case class ShapeOp[I <: Shape](input: I) extends NewShape {
+      case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val _shape = {
+        val out = {
 
           val right = Shape(2, 2, 1)
           Ops.:/.applyByDim(input, right)
         }
       }
 
-      override def shapeOp[I <: Shape](input: I): ShapeOp[I] =
-        ShapeOp[I](input)
+      override def apply[I <: Shape](input: I): ApplyT[I] =
+        ApplyT[I](input)
     }
 
     case class Flatten() extends Layer {
 
-      case class ShapeOp[I <: Shape](input: I) extends NewShape {
+      case class ApplyT[I <: Shape](input: I) extends LazyTensor {
 
-        val _shape = {
+        val out = {
 
           Ops.:*.reduceByName(input.:<<=*("i", "i", "i"))
         }
       }
 
-      override def shapeOp[I <: Shape](input: I): ShapeOp[I] =
-        ShapeOp[I](input)
+      override def apply[I <: Shape](input: I): ApplyT[I] =
+        ApplyT[I](input)
     }
 
+    case class
+
     {
-      val data = Tensor(Shape(28, 28, 1))
-      data.shape.reason
+      val data = EagerTensor(Shape(28, 28, 1))
+      data.out.reason
 
       val conv1 = Conv(Shape(6))
       val maxPool1 = Pooling()
@@ -104,11 +116,18 @@ object TutorialPart3 {
 
       val flatten = Flatten()
 
-      val output = data into
-        conv1 into
-        maxPool1 into
-        conv2 into
-        maxPool2 into
+      val ou0 = conv1.apply(data.out)
+      ou0._out.peek
+
+      val ou1 = data into conv1
+
+      ou1._out.peek
+
+      val output = data into_!
+        conv1 into_!
+        maxPool1 into_!
+        conv2 into_!
+        maxPool2 into_!
         flatten
 
     }
