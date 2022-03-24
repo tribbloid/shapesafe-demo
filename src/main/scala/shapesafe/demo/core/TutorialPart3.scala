@@ -26,8 +26,7 @@ object TutorialPart3 {
         neo
       }
 
-      def into_![O <: LeafShape](layer: Layer)(
-          implicit
+      def into_![O <: LeafShape](layer: Layer)(implicit
           //          to: layer.ShapeOut[S]#ReasonTo[O] // TODO: why this break?
           evalTo: layer.ApplyShape[_Shape]#_ShapeType |-@- O
       ): EagerTensor[Shape.^[O]] = {
@@ -56,7 +55,7 @@ object TutorialPart3 {
     }
 
     case class Conv[OC <: LeafShape.Vector_](
-        oChannel: OC
+        nChannel: OC
     ) extends Layer {
 
       case class ApplyT[I <: Shape](input: I) extends LazyTensor {
@@ -65,7 +64,7 @@ object TutorialPart3 {
 
           val ij = input
             .rearrangeBy(Indices >< LtoR(0) >< LtoR(1))
-          ij >< oChannel
+          ij >< nChannel
         }
       }
 
@@ -114,7 +113,8 @@ object TutorialPart3 {
           val empty = Ops.==!.applyByDim(input, in)
             .rearrangeBy(Indices.Eye)
 
-          empty >< shape
+          val result = empty >< out
+          result
         }
       }
 
@@ -149,8 +149,15 @@ object TutorialPart3 {
         conv2 into_!
         maxPool2 into_!
         flatten
-//      into_!
-//        fc1
+
+      fc1.in.peek
+
+      output.shape.peek
+
+      val out2 = output into
+        fc1
+
+      out2.shape.peek
 
     }
   }
