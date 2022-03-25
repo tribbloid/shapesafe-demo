@@ -127,7 +127,7 @@ object TutorialPart3 {
     }
 
     {
-      val data = EagerTensor(Shape(28, 28, 1))
+      val data = Input(Shape(28, 28, 1))
       data.shape.reason
 
       val conv1 = Conv2D(Shape(6))
