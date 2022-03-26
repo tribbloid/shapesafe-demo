@@ -2,7 +2,7 @@ package shapesafe.demo.core
 
 import shapesafe.core.Ops
 import shapesafe.core.shape.Index.LtoR
-import shapesafe.core.shape.{Indices, LeafShape, Shape}
+import shapesafe.core.shape.{Indices, LeafShape, Shape, ShapeType}
 
 object TutorialPart3 {
 
@@ -37,9 +37,9 @@ object TutorialPart3 {
       // Scala has no support for fully dependent type.
       // To make use of it, we'll need to write implementations with more specific `_Shape` types
       val shape: Shape
-      type _Shape >: shape.type <: Shape
+      final type _Shape = shape._ShapeType
 
-      def _shape: _Shape = shape
+      def _shape: Shape.^[_Shape] = shape.shapeType.^
     }
 
     // The API of `Module` therefore adapts accordingly:
@@ -49,9 +49,9 @@ object TutorialPart3 {
       def apply(input: TypedTensor): ApplyT[input._Shape]
       // Alas, the following type constructor definition is completely redundant, and much longer than I prefer.
       // But scala 2.13 can't perform eta-expansion on polymorphic functions & case classes
-      type ApplyT[I <: Shape] <: TypedTensor // TODO: this can be superseded by polymorphic eta-extension in Scala 3
+      type ApplyT[I <: ShapeType] <: TypedTensor // TODO: this can be superseded by polymorphic eta-extension in Scala 3
 
-      final type ApplyShape[I <: Shape] = ApplyT[I]#_Shape
+      final type ApplyShape[I <: ShapeType] = ApplyT[I]#_Shape
     }
 
     // Almost there! As a syntactic backup for old school ML engineers, let's add 2 shortcuts for sequential NN definition:
@@ -78,8 +78,8 @@ object TutorialPart3 {
       def >>![O <: LeafShape](layer: TypedModule)(
           implicit
           //          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this shortcut to break
-          evalTo: layer.ApplyShape[_Shape]#_ShapeType |-@- O
-      ): Input[Shape.^[O]] = {
+          evalTo: layer.ApplyShape[_Shape] |-@- O
+      ): Input[O] = {
         val unevaluated = >>(layer)
         val proven: O = evalTo(unevaluated._shape.shapeType)
 
@@ -87,26 +87,14 @@ object TutorialPart3 {
       }
     }
 
-    // Finally we are done with abstractions! Now we just need to finish implementing all types of `SequentialTensor`
-    case class Input[S <: Shape.Leaf_](override val shape: S) extends SequentialTensor {
-
-      // if the Tensor is a manually defined input, `_Shape` will be a type parameter
-      override type _Shape = S
-    }
-    trait Output extends SequentialTensor {
-
-      // ... otherwise it is inferred automatically from Scala expressions
-      override type _Shape = shape.type
-    }
-
-    // ... as well as implementing all types of `TypedModule`
+    // Finally we are done with abstractions! Now we just need to finish implementing all types of `TypedModule`
     case class Conv2D[OC <: Shape.Leaf.Vector_](
         nChannel: OC
     ) extends TypedModule {
 
       // Here, The case class automatically overrides the super type constructor
       // This applies to all implementations of TypedModule
-      case class ApplyT[I <: Shape](input: I) extends Output {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -123,7 +111,7 @@ object TutorialPart3 {
 
     case class Pooling2D() extends TypedModule {
 
-      case class ApplyT[I <: Shape](input: I) extends Output {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -138,7 +126,7 @@ object TutorialPart3 {
 
     case class Flatten() extends TypedModule {
 
-      case class ApplyT[I <: Shape](input: I) extends Output {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -155,7 +143,7 @@ object TutorialPart3 {
         out: OS
     ) extends TypedModule {
 
-      case class ApplyT[I <: Shape](input: I) extends Output {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -170,80 +158,57 @@ object TutorialPart3 {
         ApplyT(input._shape)
     }
 
+    // A manually-typed `Input` tensor also need a minimalistic type constructor`
+    case class Input[S <: LeafShape](override val shape: Shape.^[S]) extends SequentialTensor {}
+
     // now all the ingredients are made type-safe, let's take it for a spin
-    {
-      val data = Input(Shape(28, 28, 1))
-      // input looks reasonable
-      data.shape.reason
+    val data = Input(Shape(28, 28, 1))
+    // input looks reasonable
+    data.shape.reason
 
-      val conv1 = Conv2D(Shape(6))
-      val maxPool1 = Pooling2D()
+    val conv1 = Conv2D(Shape(6))
+    val maxPool1 = Pooling2D()
 
-      val conv2 = Conv2D(Shape(16))
-      val maxPool2 = Pooling2D()
+    val conv2 = Conv2D(Shape(16))
+    val maxPool2 = Pooling2D()
 
-      val flatten = Flatten()
+    val flatten = Flatten()
 
-      val fc1 = FullyConnected(Shape(784), Shape(120))
-      val fc2 = FullyConnected(Shape(120), Shape(84))
-      val fc3 = FullyConnected(Shape(84), Shape(10))
-      // that's 9 layers
+    val fc1 = FullyConnected(Shape(784), Shape(120))
+    val fc2 = FullyConnected(Shape(120), Shape(84))
+    val fc3 = FullyConnected(Shape(84), Shape(10))
+    // that's 9 layers
+  }
 
-      object LazyTyping {
+  // a sequential model/architecture can be defined in 2 ways:
+  object EagerTensorTyping {
 
-        val output = data >>
-          conv1 >>
-          maxPool1 >>
-          conv2 >>
-          maxPool2 >>
-          flatten >>
-          fc1 >>
-          fc2 >>
-          fc3
+    import TensorTyping._
 
-        output.shape.reason
+    val output = data >>!
+      conv1 >>!
+      maxPool1 >>!
+      conv2 >>!
+      maxPool2 >>!
+      flatten >>!
+      fc1 >>!
+      fc2 >>!
+      fc3
 
-        // what happens if you forgot maxPool2?
-        val output2 = data >>
-          conv1 >>
-          maxPool1 >>
-          conv2 >>
-          flatten >>
-          fc1 >>
-          fc2 >>
-          fc3
+    output.shape.reason
 
-        output2.shape.reason
+    // what happens if you forgot maxPool2?
+    val output2 = data >>!
+      conv1 >>!
+      maxPool1 >>!
+      conv2 >>!
+      flatten >>!
+      fc1 >>!
+      fc2 >>!
+      fc3
 
-      }
-
-      object EagerTyping {
-
-        val output = data >>!
-          conv1 >>!
-          maxPool1 >>!
-          conv2 >>!
-          maxPool2 >>!
-          flatten >>!
-          fc1 >>!
-          fc2 >>!
-          fc3
-
-        output.shape.reason
-
-        // what happens if you forgot maxPool2?
-        val output2 = data >>!
-          conv1 >>!
-          maxPool1 >>!
-          conv2 >>!
-          flatten >>!
-          fc1 >>!
-          fc2 >>!
-          fc3
-
-        // with eager verification this time, you don't need to call `eval` or `reason` anymore to find the problem
-      }
-
-    }
+    // with eager verification, the problem pops out immediately
+    // you still need to fix it
+    // but there is no need to waste several hours on training an invalid model anymore
   }
 }
