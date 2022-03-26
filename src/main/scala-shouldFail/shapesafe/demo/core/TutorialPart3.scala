@@ -22,12 +22,8 @@ object TutorialPart3 {
       // (runtime API omitted here)
     }
     // ... and untyped, functional modules, each defining a computation unit, like convolution or pooling
-    trait Module[ACCEPTING <: Tensor] {
-
-      def applyUntyped(input: ACCEPTING): Tensor = {
-        // (runtime operation omitted here)
-        ???
-      }
+    trait Module {
+      // (runtime operation omitted here)
     }
 
     // This is where the action happens:
@@ -43,13 +39,15 @@ object TutorialPart3 {
     }
 
     // The API of `Module` therefore adapts accordingly:
-    trait TypedModule extends Module[TypedTensor] {
+    trait TypedModule extends Module {
 
       // `apply` function now becomes parametric, accompanied by a type constructor
       def apply(input: TypedTensor): ApplyT[input._Shape]
       // Alas, the following type constructor definition is completely redundant, and much longer than I prefer.
       // But scala 2.13 can't perform eta-expansion on polymorphic functions & case classes
-      type ApplyT[I <: ShapeType] <: TypedTensor // TODO: this can be superseded by polymorphic eta-extension in Scala 3
+      type ApplyT[
+          I <: ShapeType
+      ] <: TypedTensor // TODO: this can be superseded by polymorphic eta-extension in Scala 3
 
       final type ApplyShape[I <: ShapeType] = ApplyT[I]#_Shape
     }
@@ -75,8 +73,7 @@ object TutorialPart3 {
 
       You'll see the effect at the end of this tutorial
        */
-      def >>![O <: LeafShape](layer: TypedModule)(
-          implicit
+      def >>![O <: LeafShape](layer: TypedModule)(implicit
           //          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this shortcut to break
           evalTo: layer.ApplyShape[_Shape] |-@- O
       ): Input[O] = {
@@ -94,7 +91,8 @@ object TutorialPart3 {
 
       // Here, The case class automatically overrides the super type constructor
       // This applies to all implementations of TypedModule
-      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I])
+          extends SequentialTensor {
 
         val shape = {
 
@@ -111,7 +109,8 @@ object TutorialPart3 {
 
     case class Pooling2D() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I])
+          extends SequentialTensor {
 
         val shape = {
 
@@ -126,7 +125,8 @@ object TutorialPart3 {
 
     case class Flatten() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I])
+          extends SequentialTensor {
 
         val shape = {
 
@@ -143,11 +143,12 @@ object TutorialPart3 {
         out: OS
     ) extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I])
+          extends SequentialTensor {
 
         val shape = {
 
-          val empty = Ops.==!.applyByDim(input, in).select0
+          val empty = Ops.==!.applyByDim(input, in).dropAll
 
           val result = empty >< out
           result
@@ -159,7 +160,8 @@ object TutorialPart3 {
     }
 
     // A manually-typed `Input` tensor also need a minimalistic type constructor`
-    case class Input[S <: LeafShape](override val shape: Shape.^[S]) extends SequentialTensor {}
+    case class Input[S <: LeafShape](override val shape: Shape.^[S])
+        extends SequentialTensor {}
 
     // now all the ingredients are made type-safe, let's take it for a spin
     val data = Input(Shape(28, 28, 1))

@@ -1,6 +1,6 @@
 package shapesafe.demo.core
 
-object TutorialPart4 {
+object TutorialPart3_Continue {
 
   // If for some reason (e.g. there is no way to introduce implicit type class) there is no way to eagerly compute shapes
   // Simply replacing all `>>!` with `>>`
