@@ -31,7 +31,7 @@ object TutorialPart1 {
   // "Unchecked" is a special Arity type that enables gradual typing
   val vU = Arity.Unchecked
 
-  object CompileTimeReasoning {
+  object StaticReasoning {
 
     // a counterintuitive distinction of shapesafe is the lazy verification paradigm
     // arities or shapes are, by default, typed by their (unvalidated) expressions,
