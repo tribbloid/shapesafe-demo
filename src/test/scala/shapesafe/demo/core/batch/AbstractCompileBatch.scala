@@ -52,9 +52,15 @@ trait AbstractCompileBatch {
     }
 
     it(s"ETA ${durationMSCap}ms") {
-      println("")
 
-      assert(durationMS <= durationMSCap, ": Benchmark is too slow")
+      val msg = s"takes ${durationMS}ms - expected ${durationMSCap}ms"
+
+      println(msg)
+
+      Predef.assert(
+        durationMS <= durationMSCap,
+        s"compilation is too slow: $msg"
+      )
     }
   }
 
