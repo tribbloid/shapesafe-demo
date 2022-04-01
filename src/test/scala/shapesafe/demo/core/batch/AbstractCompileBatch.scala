@@ -1,7 +1,7 @@
 package shapesafe.demo.core.batch
 
 import shapesafe.BaseSpec
-import splain.runtime.TryCompile
+import splain.runtime.{Issue, TryCompile}
 
 import java.io.File
 import java.nio.file.{Path, Paths}
@@ -32,30 +32,28 @@ trait AbstractCompileBatch {
       code
     }
 
-    var durationMS: Long = -1
-
-    lazy val durationMSCap: Long = 20 * 1000
-
-    it(s"benchmarking ...") {
+    final lazy val (issues: Seq[Issue], durationMS: Long) = {
       engine.reporter.reset()
 
       val t1 = System.currentTimeMillis()
       val compile = engine.apply(code)
       val t2 = System.currentTimeMillis()
 
-      durationMS = t2 - t1
+      compile.issues -> (t2 - t1)
+    }
 
-      val issues = compile.issues
+    lazy val durationMSCap: Long = 20 * 1000
+
+    it(s"Compiling ...") {
       val out = issues.map(v => v.copy(sourceName = names).display).mkString("\n")
 
       out.shouldBe(groundTruth)
     }
 
-    it(s"ETA ${durationMSCap}ms") {
+    val CapMsg = s"ETA ${durationMSCap}ms"
+    it(CapMsg) {
 
-      val msg = s"takes ${durationMS}ms - expected ${durationMSCap}ms"
-
-      println(msg)
+      val msg = s"takes ${durationMS}ms - $CapMsg"
 
       Predef.assert(
         durationMS <= durationMSCap,
