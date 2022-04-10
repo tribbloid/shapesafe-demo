@@ -44,22 +44,27 @@ trait AbstractCompileBatch {
 
     lazy val durationMSCap: Long = 20 * 1000
 
-    it(s"Compiling ...") {
-      val out = issues.map(v => v.copy(sourceName = names).display).mkString("\n")
+    describe(names) {
+      it(s"Compiling ...") {
+        val out = issues.map(v => v.copy(sourceName = names).display).mkString("\n")
 
-      out.shouldBe(groundTruth)
+        out.shouldBe(groundTruth)
+      }
+
+      val CapMsg = s"ETA ${durationMSCap}ms"
+      it(CapMsg) {
+
+        val msg = s"takes ${durationMS}ms - $CapMsg"
+
+        println(s"$names - $msg")
+
+        Predef.assert(
+          durationMS <= durationMSCap,
+          s"compilation is too slow: $msg"
+        )
+      }
     }
 
-    val CapMsg = s"ETA ${durationMSCap}ms"
-    it(CapMsg) {
-
-      val msg = s"takes ${durationMS}ms - $CapMsg"
-
-      Predef.assert(
-        durationMS <= durationMSCap,
-        s"compilation is too slow: $msg"
-      )
-    }
   }
 
 }
