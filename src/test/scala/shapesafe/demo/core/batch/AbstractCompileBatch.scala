@@ -1,7 +1,7 @@
 package shapesafe.demo.core.batch
 
 import shapesafe.BaseSpec
-import splain.runtime.{Issue, TryCompile}
+import splain.test.{Issue, TryCompile}
 
 import java.io.File
 import java.nio.file.{Path, Paths}
