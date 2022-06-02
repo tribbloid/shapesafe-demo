@@ -2,7 +2,7 @@ scalaVersion := "2.13.8"
 
 val groupId = "ai.acyclic.shapesafe"
 val projectName = "shapesafe-demo"
-val projectVersion = "0.1.3"
+val projectVersion = "0.1.4"
 
 val macroParadiseVersion = "2.1.1"
 
