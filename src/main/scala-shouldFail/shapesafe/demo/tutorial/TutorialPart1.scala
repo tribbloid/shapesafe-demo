@@ -1,4 +1,4 @@
-package shapesafe.demo.core
+package shapesafe.demo.tutorial
 
 import shapesafe.core.arity.Arity
 import shapesafe.core.shape.{Shape, Names, Indices, Index}

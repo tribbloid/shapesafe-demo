@@ -1,4 +1,4 @@
-package shapesafe.demo.core
+package shapesafe.demo.tutorial
 
 import shapesafe.core.Ops
 import shapesafe.core.shape.Index.LtoR
