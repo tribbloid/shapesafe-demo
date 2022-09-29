@@ -1,7 +1,7 @@
 package shapesafe.demo.core
 
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.{Shape, Names, Indices, Index}
+import shapesafe.core.shape.{Index, Indices, Names, Shape}
 import shapesafe.core.Ops
 
 object Architecture {

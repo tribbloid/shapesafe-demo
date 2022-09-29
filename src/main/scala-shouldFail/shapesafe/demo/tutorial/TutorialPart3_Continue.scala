@@ -12,7 +12,7 @@ In this slightly more complex tutorial, we will write a static verifier for the 
 https://ai.facebook.com/blog/paving-the-way-for-software-20-with-kotlin/
 
 A 9-layer feedforward neural network
- */
+   */
   object TensorTyping {
 
     import shapesafe.core.shape.ProveShape.AsLeafShape._
@@ -46,7 +46,7 @@ A 9-layer feedforward neural network
       // Alas, the following type constructor definition is completely redundant, and much longer than I prefer.
       // But scala 2.13 can't perform eta-expansion on polymorphic functions & case classes
       type ApplyT[
-        I <: ShapeType
+          I <: ShapeType
       ] <: TypedTensor // TODO: this can be superseded by polymorphic eta-extension in Scala 3
 
       final type ApplyShape[I <: ShapeType] = ApplyT[I]#_Shape
@@ -73,9 +73,10 @@ A 9-layer feedforward neural network
 
       You'll see the effect at the end of this tutorial
        */
-      def >>![O <: LeafShape](layer: TypedModule)(implicit
-                                                  //          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this shortcut to break
-                                                  evalTo: layer.ApplyShape[_Shape] |-@- O
+      def >>![O <: LeafShape](layer: TypedModule)(
+          implicit
+          //          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this shortcut to break
+          evalTo: layer.ApplyShape[_Shape] |-@- O
       ): Input[O] = {
         val unevaluated = >>(layer)
         val proven: O = evalTo(unevaluated._shape.shapeType)
@@ -86,13 +87,12 @@ A 9-layer feedforward neural network
 
     // Finally we are done with abstractions! Now we just need to finish implementing all types of `TypedModule`
     case class Conv2D[OC <: Shape.Leaf.Vector_](
-                                                 nChannel: OC
-                                               ) extends TypedModule {
+        nChannel: OC
+    ) extends TypedModule {
 
       // Here, The case class automatically overrides the super type constructor
       // This applies to all implementations of TypedModule
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-        extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -109,8 +109,7 @@ A 9-layer feedforward neural network
 
     case class Pooling2D() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-        extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -125,8 +124,7 @@ A 9-layer feedforward neural network
 
     case class Flatten() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-        extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -139,12 +137,11 @@ A 9-layer feedforward neural network
     }
 
     case class FullyConnected[IS <: Shape, OS <: Shape](
-                                                         in: IS,
-                                                         out: OS
-                                                       ) extends TypedModule {
+        in: IS,
+        out: OS
+    ) extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-        extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -160,8 +157,7 @@ A 9-layer feedforward neural network
     }
 
     // A manually-typed `Input` tensor also need a minimalistic type constructor`
-    case class Input[S <: LeafShape](override val shape: Shape.^[S])
-      extends SequentialTensor {}
+    case class Input[S <: LeafShape](override val shape: Shape.^[S]) extends SequentialTensor {}
 
     // now all the ingredients are made type-safe, let's take it for a spin
     val data = Input(Shape(28, 28, 1))

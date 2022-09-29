@@ -1,7 +1,7 @@
 package shapesafe.demo.tutorial
 
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.{Shape, Names, Indices, Index}
+import shapesafe.core.shape.{Index, Indices, Names, Shape}
 import shapesafe.core.Ops
 
 object TutorialPart1 {
@@ -41,8 +41,8 @@ object TutorialPart1 {
     expr.peek
 
     // it is perfectly viable to define illegal expressions
-    val illegal = (v1 :/ v0)
-    val illegal2 = (v1 ==! v0)
+    val illegal = v1 :/ v0
+    val illegal2 = v1 ==! v0
 
     // ... and peek them as-is
     illegal.peek

@@ -12,11 +12,11 @@ object ShowCase_Complex {
     import ShowCase.ShapeArithmetics.conv2D
 
     def c3p1(
-              in: Shape,
-              kernel: Shape,
-              padding: Shape,
-              stride: Shape,
-              pooling: Shape
+        in: Shape,
+        kernel: Shape,
+        padding: Shape,
+        stride: Shape,
+        pooling: Shape
     ) = {
 
       val ij = Names("i", "j")
@@ -29,7 +29,7 @@ object ShowCase_Complex {
       val c2 = conv(c1)
       val c3 = conv(c2)
 
-      val _pooling = (pooling >< pooling)
+      val _pooling = pooling >< pooling
       val p1 = Ops.:/.applyByDim(c3.namedBy(ij), _pooling)
 
       p1

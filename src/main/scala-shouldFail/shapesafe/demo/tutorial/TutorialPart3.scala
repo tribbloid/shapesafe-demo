@@ -73,7 +73,8 @@ object TutorialPart3 {
 
       You'll see the effect at the end of this tutorial
        */
-      def >>![O <: LeafShape](layer: TypedModule)(implicit
+      def >>![O <: LeafShape](layer: TypedModule)(
+          implicit
           //          to: layer.ApplyShape[_Shape]#ReasonTo[O] // FIXME: a compiler error in Scala 2.13.8 caused this shortcut to break
           evalTo: layer.ApplyShape[_Shape] |-@- O
       ): Input[O] = {
@@ -91,8 +92,7 @@ object TutorialPart3 {
 
       // Here, The case class automatically overrides the super type constructor
       // This applies to all implementations of TypedModule
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-          extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -109,8 +109,7 @@ object TutorialPart3 {
 
     case class Pooling2D() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-          extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -125,8 +124,7 @@ object TutorialPart3 {
 
     case class Flatten() extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-          extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -143,8 +141,7 @@ object TutorialPart3 {
         out: OS
     ) extends TypedModule {
 
-      case class ApplyT[I <: ShapeType](input: Shape.^[I])
-          extends SequentialTensor {
+      case class ApplyT[I <: ShapeType](input: Shape.^[I]) extends SequentialTensor {
 
         val shape = {
 
@@ -160,8 +157,7 @@ object TutorialPart3 {
     }
 
     // A manually-typed `Input` tensor also need a minimalistic type constructor`
-    case class Input[S <: LeafShape](override val shape: Shape.^[S])
-        extends SequentialTensor {}
+    case class Input[S <: LeafShape](override val shape: Shape.^[S]) extends SequentialTensor {}
 
     // now all the ingredients are made type-safe, let's take it for a spin
     val data = Input(Shape(28, 28, 1))

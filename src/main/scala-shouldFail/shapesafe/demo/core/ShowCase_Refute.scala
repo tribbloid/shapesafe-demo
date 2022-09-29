@@ -72,7 +72,6 @@ object ShowCase_Refute {
     s2.requireEqual(Shape(511, 511)).reason
   }
 
-
   object Composition {
     import ShowCase_Complex.Composition._
 
@@ -83,4 +82,3 @@ object ShowCase_Refute {
     s2.named("i", "i").einSum.-->*("i").reason
   }
 }
-

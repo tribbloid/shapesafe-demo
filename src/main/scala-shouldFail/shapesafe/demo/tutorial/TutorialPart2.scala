@@ -1,7 +1,7 @@
 package shapesafe.demo.tutorial
 
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.{Shape, Names, Indices, Index}
+import shapesafe.core.shape.{Index, Indices, Names, Shape}
 import shapesafe.core.Ops
 
 object TutorialPart2 {
@@ -97,7 +97,7 @@ object TutorialPart2 {
       (v3 >< v4).reason
 
       // ... while preserving their names
-      val x1 = (v34.:<<=*("x", "y") >< v345.:<<=*("i", "j", "k"))
+      val x1 = v34.:<<=*("x", "y") >< v345.:<<=*("i", "j", "k")
       x1.reason
 
       // this can go arbitrarily long
