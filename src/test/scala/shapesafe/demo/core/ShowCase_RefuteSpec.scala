@@ -95,15 +95,15 @@ class ShowCase_RefuteSpec extends ShouldFailBatch.SourceSpec {
       |383 == 511
       |    s2.requireEqual(Shape(511, 511)).reason
       |                                     ^
-      |shapesafe/demo/core/ShowCase_Refute:81: info:       507 >< 379
+      |shapesafe/demo/core/ShowCase_Refute:80: info:       507 >< 379
       |  :=  Op2ByDim_Strict[ / ]#On[Op2ByDim_Strict[ / ]#On[Op2ByDim_Strict[ + ]#On[Op2ByDim_Strict[ - ]#On[Op2ByDim_Strict[ / ]#On[Op2ByDim_Strict[ + ]#On[Op2ByDim_Strict[ - ]#On[Op2ByDim_Strict[ / ]#On[Op2ByDim_Strict[ + ]#On[Op2ByDim_Strict[ - ]#On[1024 >< 768,3 >< 3],0 >< 0],1 >< 1],3 >< 3],0 >< 0],1 >< 1],3 >< 3],0 >< 0],1 >< 1] :<<= (i >< j),2 >< 2]
       |    val s2 = c3p1(s1, kernel, 0, 1, 2).reason
       |                                       ^
-      |shapesafe/demo/core/ShowCase_Refute:83: info:     ▓▒░ cannot evaluate ░▒▓
+      |shapesafe/demo/core/ShowCase_Refute:82: info:     ▓▒░ cannot evaluate ░▒▓
       |Rearrange[ReduceByName[ == ]#On[507 >< 379 :<<= (i >< i)],i]
       |    s2.named("i", "i").einSum.-->*("i").reason
       |                                        ^
-      |shapesafe/demo/core/ShowCase_Refute:83: error: ¯\_(ツ)_/¯ 507 != 379
+      |shapesafe/demo/core/ShowCase_Refute:82: error: ¯\_(ツ)_/¯ 507 != 379
       |    ▓▒░ ... when proving arity ░▒▓
       |507 == 379
       |    s2.named("i", "i").einSum.-->*("i").reason
