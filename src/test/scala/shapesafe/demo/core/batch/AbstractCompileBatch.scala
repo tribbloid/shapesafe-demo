@@ -48,7 +48,9 @@ trait AbstractCompileBatch {
       it(s"Compiling ...") {
         val out = issues.map(v => v.copy(sourceName = names).display).mkString("\n")
 
-        out.shouldBe(groundTruth)
+        out
+          .replace('\\', '/') // windows path uses backslash
+          .shouldBe(groundTruth.replace('\\', '/'))
       }
 
       val CapMsg = s"ETA ${durationMSCap}ms"
