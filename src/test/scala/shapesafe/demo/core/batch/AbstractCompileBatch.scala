@@ -50,7 +50,10 @@ trait AbstractCompileBatch {
 
         out
           .replace('\\', '/') // windows path uses backslash
-          .shouldBe(groundTruth.replace('\\', '/'))
+          .shouldBe(
+            groundTruth.replace('\\', '/'),
+            trim = v => v.foldEmptyLines // reduce space in text fixtures
+          )
       }
 
       val CapMsg = s"ETA ${durationMSCap}ms"
