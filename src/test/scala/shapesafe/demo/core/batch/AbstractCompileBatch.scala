@@ -69,7 +69,5 @@ trait AbstractCompileBatch {
         )
       }
     }
-
   }
-
 }

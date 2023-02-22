@@ -11,9 +11,6 @@ lazy val root = project
   .in(file("."))
   .settings(
     resolvers += Resolver.mavenLocal
-    //    skip in publish := true,
-    //    sources in Compile := Seq.empty,
-    //    sources in Test := Seq.empty
   )
   .settings(commonSettings)
 
