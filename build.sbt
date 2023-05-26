@@ -1,4 +1,4 @@
-scalaVersion := "2.13.10"
+scala.version := "2.13.10"
 
 val groupId = "ai.acyclic.shapesafe"
 val projectName = "shapesafe-demo"
@@ -83,7 +83,7 @@ lazy val compileSettings = Def.settings(
     //    "-Ywarn-value-discard"
   ),
   scalacOptions ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
+    CrossVersion.partialVersion(scala.version.value) match {
       case Some((2, v)) if v >= 13 =>
         Nil
       case _ =>
@@ -97,11 +97,11 @@ lazy val compileSettings = Def.settings(
   Compile / console / scalacOptions -= "-Ywarn-unused-import",
   Test / console / scalacOptions -= "-Ywarn-unused-import",
   libraryDependencies ++= Seq(
-    scalaOrganization.value % "scala-compiler" % scalaVersion.value,
+    scalaOrganization.value % "scala-compiler" % scala.version.value,
     "ai.acyclic.shapesafe" %% "shapesafe-core" % projectVersion
   ),
   libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
+    CrossVersion.partialVersion(scala.version.value) match {
       // if scala 2.13+ is used, macro annotations are merged into scala-reflect
       // https://github.com/scala/scala/pull/6606
       case Some((2, v)) if v >= 13 =>
