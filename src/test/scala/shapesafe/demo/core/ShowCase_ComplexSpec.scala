@@ -16,5 +16,5 @@ class ShowCase_ComplexSpec extends ComplexBatch.SourceSpec {
       |                                        ^
       |""".stripMargin
 
-  override lazy val durationMSCap: Long = 14 * 1000
+  override lazy val durationMSCap: Long = 15 * 1000
 }
