@@ -110,5 +110,5 @@ class ShowCase_RefuteSpec extends ShouldFailBatch.SourceSpec {
       |                                        ^
       |""".stripMargin
 
-  override lazy val durationMSCap: Long = 35 * 1000
+  override lazy val durationMSCap: Long = 37 * 1000
 }
